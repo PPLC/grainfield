@@ -17,3 +17,4 @@ src/server/config
 npm-debug.log
 .DS_Store
 Thumbs.db
+package-lock.json
