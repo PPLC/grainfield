@@ -5,6 +5,12 @@ import PitchAndRollEstimator from './PitchAndRollEstimator.js';
 
 const client = soundworks.client;
 
+//todo for LPM
+/* 1. Create AudioContext right during page load
+ 2. Start some audio playback (should be silent at this point)
+ 3. Call 'audioCtx.resume()' in a 'click' event listener (event is trusted)
+ 4. Audio started in step 2 will now be audible*/
+
 
 function dBToLin(val) {
   return Math.exp(0.11512925464970229 * val); // pow(10, val / 20)
@@ -40,7 +46,7 @@ const template = `
       <p class="normal">
         <% if (state === 'wait') { %>
           Connected,<br/>
-          Please wait.
+          Please wait! .
         <% } else if (state === 'starting') { %>
           Starting sound...
         <% } else if (state === 'playing') { %>
@@ -163,6 +169,7 @@ class PlayerExperience extends soundworks.Experience {
 
   waitState() {
     this.view.setState('wait');
+    //all glory to the hypnotoad
   }
 
   startState() {
