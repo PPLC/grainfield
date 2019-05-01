@@ -10,6 +10,8 @@ const client = soundworks.client;
  2. Start some audio playback (should be silent at this point)
  3. Call 'audioCtx.resume()' in a 'click' event listener (event is trusted)
  4. Audio started in step 2 will now be audible*/
+ // https://phaser.discourse.group/t/audiocontext-was-not-allowed-to-start/795
+ // https://bugs.chromium.org/p/chromium/issues/detail?id=807017
 
 
 function dBToLin(val) {
