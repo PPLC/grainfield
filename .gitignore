@@ -18,3 +18,7 @@ npm-debug.log
 .DS_Store
 Thumbs.db
 package-lock.json
+src/client/.idea/.idea.client.dir/riderModule.iml
+src/client/.idea/.idea.client.dir/.idea/contentModel.xml
+src/client/.idea/.idea.client.dir/.idea/modules.xml
+src/client/.idea/.idea.client.dir/.idea/workspace.xml
