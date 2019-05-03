@@ -23,3 +23,8 @@
 In the simplest case the recorder client should run on the same computer as the Node.js server, to avoid the necessity of using a certificate.
 
 The application is based on the Soundworks framework.
+
+### Manual update of soundworks
+
+Due to the latest changes, the soundworks framework needs a manual update. To perform this, switch to the soundworks folder with
+`cd node_modules/soundworks` and run `npm install && npm run transpile` - now you're ready to go.
