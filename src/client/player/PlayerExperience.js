@@ -5,14 +5,6 @@ import PitchAndRollEstimator from './PitchAndRollEstimator.js';
 
 const client = soundworks.client;
 
-//todo for LPM
-/* 1. Create AudioContext right during page load
- 2. Start some audio playback (should be silent at this point)
- 3. Call 'audioCtx.resume()' in a 'click' event listener (event is trusted)
- 4. Audio started in step 2 will now be audible*/
- // https://phaser.discourse.group/t/audiocontext-was-not-allowed-to-start/795
- // https://bugs.chromium.org/p/chromium/issues/detail?id=807017
-
 
 function dBToLin(val) {
   return Math.exp(0.11512925464970229 * val); // pow(10, val / 20)
@@ -48,12 +40,12 @@ const template = `
       <p class="normal">
         <% if (state === 'wait') { %>
           Connected,<br/>
-          Please wait! .
+          Please wait.
         <% } else if (state === 'starting') { %>
           Starting sound...
         <% } else if (state === 'playing') { %>
           Playing,<br/>
-          Move your device.
+          Move your finger on screen.
         <% } else if (state === 'end') { %>
           Thanks,<br/>
           That's all!
@@ -113,15 +105,21 @@ class PlayerExperience extends soundworks.Experience {
       items: ['recordings'],
     });
 
-    this.motionInput = this.require('motion-input', {
-      descriptors: ['accelerationIncludingGravity'],
-    });
+    // this.motionInput = this.require('motion-input', {
+    //   descriptors: ['accelerationIncludingGravity'],
+    // });
 
     this.sharedRecorder = this.require('shared-recorder', {
       recorder: false,
     });
 
-    this._processAccelerationData = this._processAccelerationData.bind(this);
+    this.touchId = null;
+
+    // this._processAccelerationData = this._processAccelerationData.bind(this);
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onTouchMove = this.onTouchMove.bind(this);
+    this.onTouchEnd = this.onTouchEnd.bind(this);
+
     this._onBuffer = this._onBuffer.bind(this);
   }
 
@@ -166,12 +164,16 @@ class PlayerExperience extends soundworks.Experience {
       this[`${value}State`]();
     });
 
-    this.motionInput.addListener('accelerationIncludingGravity', this._processAccelerationData);
+    // this.motionInput.addListener('accelerationIncludingGravity', this._processAccelerationData);
+
+    const surface = new soundworks.TouchSurface(this.view.$el, { normalizeCoordinates: true });
+    surface.addListener('touchstart', this.onTouchStart);
+    surface.addListener('touchmove', this.onTouchMove);
+    surface.addListener('touchend', this.onTouchEnd);
   }
 
   waitState() {
     this.view.setState('wait');
-    //all glory to the hypnotoad
   }
 
   startState() {
@@ -223,6 +225,31 @@ class PlayerExperience extends soundworks.Experience {
     this.renderer.setPosition(positionFactor);
   }
 
+  onTouchStart(id, x, y) {
+    if (this.touchId === null) {
+      const pos = 2 * x - 1;
+      const cutoff = Math.min(1, 1.5 - y);
+      this.synth.setPositionFactor(pos);
+      this.synth.setCutoffFactor(cutoff);
+      this.renderer.setPosition(x, y);
+      this.touchId = id;
+    }
+  }
+
+  onTouchMove(id, x, y) {
+    if (id === this.touchId) {
+      const pos = 2 * x - 1;
+      const cutoff = Math.min(1, 1.5 - y);
+      this.synth.setPositionFactor(pos);
+      this.synth.setCutoffFactor(cutoff);
+      this.renderer.setPosition(x, y);
+    }
+  }
+
+  onTouchEnd(id) {
+    if (id === this.touchId)
+      this.touchId = null;
+  }
 }
 
 export default PlayerExperience;
