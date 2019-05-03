@@ -143,3 +143,11 @@ input[type=range].slider:focus::-ms-fill-lower {
 input[type=range].slider:focus::-ms-fill-upper {
   background: #9f9f9f;
 }
+
+/* Animate the background changes for a smoother experience */
+.portrait {
+  -webkit-transition: background-color 1s ease-in-out;
+  -moz-transition: background-color 1s ease-in-out;
+  -o-transition: background-color 1s ease-in-out;
+  transition: background-color 1s ease-in-out;
+}
