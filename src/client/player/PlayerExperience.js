@@ -95,7 +95,7 @@ class PlayerExperience extends soundworks.Experience {
 
     this.kind = kind;
 
-    this.platform = this.require('platform', { features: 'web-audio' });
+    this.platform = this.require('platform', {features: 'web-audio'});
     // this.require('locator');
     this.checkin = this.require('checkin');
     this.audioBufferManager = this.require('audio-buffer-manager');
@@ -131,7 +131,7 @@ class PlayerExperience extends soundworks.Experience {
 
     this.synth = new Synth();
     this.pitchAndRoll = new PitchAndRollEstimator();
-    this.view = new PlayerView(template, { state: 'none' });
+    this.view = new PlayerView(template, {state: 'none'});
     this.renderer = new Renderer();
 
     this.show();
@@ -166,7 +166,7 @@ class PlayerExperience extends soundworks.Experience {
 
     // this.motionInput.addListener('accelerationIncludingGravity', this._processAccelerationData);
 
-    const surface = new soundworks.TouchSurface(this.view.$el, { normalizeCoordinates: true });
+    const surface = new soundworks.TouchSurface(this.view.$el, {normalizeCoordinates: true});
     surface.addListener('touchstart', this.onTouchStart);
     surface.addListener('touchmove', this.onTouchMove);
     surface.addListener('touchend', this.onTouchEnd);
@@ -227,12 +227,8 @@ class PlayerExperience extends soundworks.Experience {
 
   onTouchStart(id, x, y) {
     if (this.touchId === null) {
-      const pos = 2 * x - 1;
-      const cutoff = Math.min(1, 1.5 - y);
-      this.synth.setPositionFactor(pos);
-      this.synth.setCutoffFactor(cutoff);
-      this.renderer.setPosition(x, y);
       this.touchId = id;
+      this.onTouchMove(id, x, y);
     }
   }
 
